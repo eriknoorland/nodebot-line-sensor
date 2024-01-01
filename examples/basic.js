@@ -1,4 +1,4 @@
-const LineSensor = require('../src/lineSensor');
+const LineSensor = require('../dist/index.cjs');
 const lineSensor = LineSensor('/dev/tty.usbserial-14130');
 
 lineSensor.on('data', (data) => {
