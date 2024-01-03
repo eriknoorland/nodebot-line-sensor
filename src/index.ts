@@ -17,7 +17,7 @@ export default (path: string) => {
         setTimeout(reject, 0);
       }
 
-      port = new SerialPort(path, { baudRate: 115200 });
+      port = new SerialPort({ path, baudRate: 115200 });
       parser = new Parser();
 
       port.pipe(parser);
