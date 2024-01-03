@@ -1,31 +1,23 @@
-const EventEmitter = require('events');
-const SerialPort = require('serialport');
-const cobs = require('cobs');
-const Parser = require('./Parser');
+import EventEmitter from 'events';
+import { SerialPort } from 'serialport';
+import Parser from './Parser';
 
-/**
- * LineSensor
- * @param {String} path
- * @return {Object}
- */
-const lineSensor = (path) => {
+const cobs = require('cobs');
+
+export default (path: string) => {
   const eventEmitter = new EventEmitter();
   const requestStartFlag = 0xA1;
 
-  let port;
+  let port: SerialPort;
   let parser;
 
-  /**
-   * Init
-   * @return {Promise}
-   */
-  function init() {
+  function init(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (port) {
         setTimeout(reject, 0);
       }
 
-      port = new SerialPort(path, { baudRate: 115200 });
+      port = new SerialPort({ path, baudRate: 115200 });
       parser = new Parser();
 
       port.pipe(parser);
@@ -40,21 +32,13 @@ const lineSensor = (path) => {
     });
   }
 
-  /**
-   * Ask controller for ready response
-   * @return {Promise}
-   */
   function isReady() {
     writeToSerialPort([requestStartFlag, 0x01]);
 
     return Promise.resolve();
   }
 
-  /**
-   * Closes the serial connection
-   * @returns {Promise}
-   */
-  function close() {
+  function close(): Promise<void> {
     return new Promise(resolve => {
       writeToSerialPort([requestStartFlag, 0x02]);
 
@@ -64,7 +48,7 @@ const lineSensor = (path) => {
     });
   }
 
-  function writeToSerialPort(data) {
+  function writeToSerialPort(data: number[]) {
     port.write(cobs.encode(Buffer.from(data), true));
   }
 
@@ -76,13 +60,11 @@ const lineSensor = (path) => {
     });
   }
 
-  return {
+  return Object.freeze({
     close,
     init,
     isReady,
     on: eventEmitter.on.bind(eventEmitter),
     off: eventEmitter.off.bind(eventEmitter),
-  };
+  });
 };
-
-module.exports = lineSensor;
