@@ -28,11 +28,8 @@ export default [
       plugins: [
         typescript({
           exclude: [
-            '**/debug',
             '**/examples',
             '**/arduino',
-            '**/test',
-            '**/*.test.ts',
           ],
         }),
         terser(),
