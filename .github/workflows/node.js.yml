@@ -20,6 +20,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm test
       env:
         NODE_AUTH_TOKEN: ${{ github.token }}
+    - run: npm test
