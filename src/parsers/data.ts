@@ -1,19 +1,14 @@
 import { math } from '@eriknoorland/nodebot-utils';
-import { Data } from '../interfaces';
-import { DataPacket } from '../types';
+import { DataPacket, Data } from '../interfaces';
 
 export default (data: DataPacket): Data => {
-  return data.reduce((acc, value, index, array) => {
-    if (index % 2 === 1) {
-      const msB = math.parseDecToBinary(data[index - 1]);
-      const lsB = math.parseDecToBinary(data[index]);
+  const mostSignificantBits = data.filter((value, index) => index % 2 === 0)
+  const leastSignificantBits = data.filter((value, index) => index % 2 === 1)
+  
+  return leastSignificantBits.map((value, index) => {
+    const msB = math.parseDecToBinary(mostSignificantBits[index]);
+    const lsB = math.parseDecToBinary(value);
 
-      return [
-        ...acc,
-        parseInt(`${msB}${lsB}`, 2),
-      ];
-    }
-
-    return acc;
-  }, []);
+    return parseInt(`${msB}${lsB}`, 2);
+  })
 };

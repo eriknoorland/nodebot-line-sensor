@@ -1,1 +1,0 @@
-export type DataPacket = [number, number, number, number, number, number, number, number, number, number];

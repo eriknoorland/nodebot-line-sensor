@@ -17,7 +17,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha"
   },
   "author": "",
   "license": "ISC",
@@ -29,9 +29,12 @@
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.5",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.10.6",
+    "mocha": "^10.8.2",
     "rollup": "^4.9.2",
     "rollup-plugin-dts": "^6.1.0",
+    "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"
   }

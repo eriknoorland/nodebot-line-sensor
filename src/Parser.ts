@@ -1,6 +1,6 @@
 import { Transform } from 'stream';
 import dataParser from './parsers/data';
-import { DataPacket } from './types';
+import { DataPacket } from './interfaces';
 
 const cobs = require('cobs');
 const numDescriptorBytes = 4;
@@ -31,15 +31,10 @@ class Parser extends Transform {
             const packetEnd = packetStart + numDescriptorBytes + dataLength + 1;
             const packet = this.buffer.slice(packetStart, packetEnd);
             const decodedPacket: Buffer = cobs.decode(packet);
-            const packetData: number[] = [];
+            const packetData: number[] = [...decodedPacket.slice(numDescriptorBytes)];
 
             this.buffer = this.buffer.slice(packetEnd);
             j = 0;
-
-            for (let i = 0; i < dataLength; i++) {
-              const index = numDescriptorBytes + i;
-              packetData.push(decodedPacket[index]);
-            }
 
             switch(command) {
               case 0xFF:
