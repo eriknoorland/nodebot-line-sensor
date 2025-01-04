@@ -30,6 +30,7 @@ export default [
           exclude: [
             '**/examples',
             '**/arduino',
+            '**/test/*',
           ],
         }),
         terser(),
