@@ -1,6 +1,5 @@
 import { math } from '@eriknoorland/nodebot-utils';
-import { Data } from '../interfaces';
-import { DataPacket } from '../types';
+import { DataPacket, Data } from '../interfaces';
 
 export default (data: DataPacket): Data => {
   return data.reduce((acc, value, index, array) => {

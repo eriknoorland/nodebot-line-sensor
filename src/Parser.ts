@@ -1,6 +1,6 @@
 import { Transform } from 'stream';
 import dataParser from './parsers/data';
-import { DataPacket } from './types';
+import { DataPacket } from './interfaces';
 
 const cobs = require('cobs');
 const numDescriptorBytes = 4;
