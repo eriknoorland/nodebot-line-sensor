@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import { SerialPort } from 'serialport';
 import Parser from './Parser';
+import { Data } from './interfaces';
 
 const cobs = require('cobs');
 
@@ -9,7 +10,7 @@ export default (path: string) => {
   const requestStartFlag = 0xA1;
 
   let port: SerialPort;
-  let parser;
+  let parser: Parser;
 
   function init(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -28,11 +29,11 @@ export default (path: string) => {
       port.on('open', onPortOpen);
 
       parser.on('ready', resolve);
-      parser.on('data', data => eventEmitter.emit('data', data));
+      parser.on('data', (data: Data) => eventEmitter.emit('data', data));
     });
   }
 
-  function isReady() {
+  function isReady(): Promise<void> {
     writeToSerialPort([requestStartFlag, 0x01]);
 
     return Promise.resolve();
@@ -48,11 +49,11 @@ export default (path: string) => {
     });
   }
 
-  function writeToSerialPort(data: number[]) {
+  function writeToSerialPort(data: number[]): void {
     port.write(cobs.encode(Buffer.from(data), true));
   }
 
-  function onPortOpen() {
+  function onPortOpen(): void {
     port.flush(error => {
       if (error) {
         eventEmitter.emit('error', error);
