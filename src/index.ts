@@ -1,12 +1,12 @@
-import EventEmitter from 'events';
 import { SerialPort } from 'serialport';
 import Parser from './Parser';
-import { Data } from './interfaces';
+import TypedEventEmitter from './TypedEventEmitter';
+import { Data, LineSensor, LineSensorEvents } from './interfaces';
 
 const cobs = require('cobs');
 
-export default (path: string) => {
-  const eventEmitter = new EventEmitter();
+export default (path: string): LineSensor => {
+  const eventEmitter = new TypedEventEmitter<LineSensorEvents>();
   const requestStartFlag = 0xA1;
 
   let port: SerialPort;
